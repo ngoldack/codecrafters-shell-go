@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"path/filepath"
 	"strings"
 
 	"github.com/codecrafters-io/shell-starter-go/app/cmd"
@@ -27,13 +26,13 @@ func main() {
 		stores = append(stores, external.NewExternalCommandStore(path))
 	}
 
-	ex, err := os.Executable()
+	path, err := os.Getwd()
 	if err != nil {
 		panic(err)
 	}
 
 	s := &state.State{
-		Wd: filepath.Dir(ex),
+		Wd: path,
 	}
 
 	for {
