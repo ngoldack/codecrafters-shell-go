@@ -51,7 +51,7 @@ func getSearchedExecutable(e os.DirEntry, path, exe string) (string, bool) {
 	}
 
 	if info.Name() == exe {
-		return path + "/" + e.Name() + info.Name(), true
+		return path + "/" + info.Name(), true
 	}
 
 	return "", false
