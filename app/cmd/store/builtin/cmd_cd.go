@@ -33,6 +33,10 @@ func getNewPath(s *state.State, p string) string {
 		return s.Wd
 	}
 
+	if p == "~" {
+		return s.Home
+	}
+
 	// absolute path
 	if p[0] == '/' {
 		return p

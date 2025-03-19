@@ -32,7 +32,8 @@ func main() {
 	}
 
 	s := &state.State{
-		Wd: path,
+		Wd:   path,
+		Home: os.Getenv("HOME"),
 	}
 
 	for {
