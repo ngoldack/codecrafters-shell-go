@@ -23,7 +23,8 @@ func CommandType() CommandFunc {
 		for _, path := range strings.Split(paths, ":") {
 			entries, err := os.ReadDir(path)
 			if err != nil {
-				return err
+				// skip if dir can't be opened
+				continue
 			}
 
 			for _, e := range entries {
