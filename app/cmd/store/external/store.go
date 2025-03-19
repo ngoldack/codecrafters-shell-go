@@ -2,8 +2,8 @@ package external
 
 import (
 	"fmt"
-	"math/rand/v2"
 	"os"
+	"os/exec"
 
 	"github.com/codecrafters-io/shell-starter-go/app/cmd"
 )
@@ -42,24 +42,7 @@ func (s ExternalCommandStore) Find(name string) (cmd.Command, error) {
 
 func executeExternalCommand() cmd.CommandFunc {
 	return func(args []string) error {
-		fmt.Printf("Program was passed %d args (including program name).\n", len(args))
-
-		for i, arg := range args {
-			if i == 0 {
-				fmt.Printf("Arg #%d (program name): %v\n", i, arg)
-			} else {
-				fmt.Printf("Arg #%d: %v\n", i, arg)
-			}
-		}
-
-		fmt.Printf("Program Signature: %s\n", calculateProgrammSignature())
-
+		exec.Command(args[0], args[:]...).Run()
 		return nil
 	}
-}
-
-// 10 digit random number
-func calculateProgrammSignature() string {
-	r := rand.Float64()
-	return fmt.Sprintf("%d", int(r*10000000000))
 }
