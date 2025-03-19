@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 func CommandEcho() CommandFunc {
 	return func(args []string) error {
@@ -8,10 +11,7 @@ func CommandEcho() CommandFunc {
 			return nil
 		}
 
-		for _, v := range args[1:] {
-			fmt.Print(v)
-		}
-		fmt.Print("\n")
+		fmt.Println(strings.Join(args[1:], ""))
 		return nil
 	}
 }
