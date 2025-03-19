@@ -10,7 +10,7 @@ func CommandType() CommandFunc {
 			return fmt.Errorf("no args given")
 		}
 
-		if _, ok := cmds[args[0]]; ok {
+		if _, ok := cmds[args[1]]; ok {
 			fmt.Printf("%s is a shell builtin\n", args[1])
 			return nil
 		}
