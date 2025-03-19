@@ -11,7 +11,7 @@ func CommandEcho() CommandFunc {
 			return nil
 		}
 
-		fmt.Println(strings.Join(args[1:], ""))
+		fmt.Println(strings.Join(args[1:], " "))
 		return nil
 	}
 }
