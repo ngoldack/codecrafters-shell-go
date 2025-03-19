@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"strconv"
 	"strings"
 )
 
@@ -13,19 +12,8 @@ import (
 type CommandFunc = func(args []string) error
 
 var cmds map[string]CommandFunc = map[string]CommandFunc{
-	"exit": func(args []string) error {
-		if len(args) <= 1 {
-			return errors.New("no status code")
-		}
-
-		i, err := strconv.Atoi(args[1])
-		if err != nil {
-			return fmt.Errorf("failed to convert to int: %w", err)
-		}
-
-		os.Exit(i)
-		return nil
-	},
+	"exit": CommandExit(),
+	"echo": CommandEcho(),
 }
 
 func main() {
