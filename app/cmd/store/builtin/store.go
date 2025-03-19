@@ -1,6 +1,8 @@
 package builtin
 
-import "github.com/codecrafters-io/shell-starter-go/app/cmd"
+import (
+	"github.com/codecrafters-io/shell-starter-go/app/cmd"
+)
 
 type CommandStoreBuiltin struct {
 	internalCmds map[string]cmd.CommandFunc

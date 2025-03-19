@@ -14,7 +14,7 @@ import (
 func main() {
 	// Create command store
 	paths := strings.Split(os.Getenv("PATH"), ":")
-	stores := make([]cmd.CommandStore, len(paths)+1)
+	stores := make([]cmd.CommandStore, 0)
 	stores = append(stores, builtin.NewBuiltinStore())
 	for _, path := range paths {
 		stores = append(stores, external.NewExternalCommandStore(path))
