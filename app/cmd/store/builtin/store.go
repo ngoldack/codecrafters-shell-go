@@ -16,6 +16,7 @@ func NewBuiltinStore() *CommandStoreBuiltin {
 	s.internalCmds["exit"] = commandExit()
 	s.internalCmds["echo"] = commandEcho()
 	s.internalCmds["type"] = commandType(s.internalCmds)
+	s.internalCmds["pwd"] = commandPwd()
 
 	return s
 }
