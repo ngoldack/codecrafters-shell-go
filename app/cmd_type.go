@@ -11,7 +11,7 @@ func CommandType() CommandFunc {
 		}
 
 		if _, ok := cmds[args[0]]; ok {
-			fmt.Printf("%s is a shell builtin", args[0])
+			fmt.Printf("%s is a shell builtin\n", args[0])
 			return nil
 		}
 
