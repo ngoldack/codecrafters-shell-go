@@ -37,6 +37,7 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
+		command, _ = strings.CutSuffix(command, "\n")
 
 		args := strings.Split(command, " ")
 
