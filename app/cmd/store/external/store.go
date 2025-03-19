@@ -42,10 +42,11 @@ func (s ExternalCommandStore) Find(name string) (cmd.Command, error) {
 }
 
 func executeExternalCommand() cmd.CommandFunc {
-	return func(_ *state.State, args []string) error {
+	return func(s *state.State, args []string) error {
 		c := exec.Command(args[0], args[1:]...)
 		c.Stdout = os.Stdout
 		c.Stderr = os.Stderr
+		c.Dir = s.Wd
 
 		if err := c.Run(); err != nil {
 			return err

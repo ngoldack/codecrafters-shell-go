@@ -3,6 +3,7 @@ package builtin
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/codecrafters-io/shell-starter-go/app/cmd"
 	"github.com/codecrafters-io/shell-starter-go/app/state"
@@ -36,6 +37,23 @@ func getNewPath(s *state.State, p string) string {
 	if p[0] == '/' {
 		return p
 	}
+
+	for _, seg := range strings.Split(p, "/") {
+		if seg == ".." {
+			split := strings.Split(s.Wd, "/")
+			s.Wd = strings.Join(split[:len(split)-1], "/")
+			continue
+		}
+
+		if seg == "." {
+			continue
+		}
+
+		s.Wd += "/" + seg
+	}
+
+	// remove trailing slash
+	s.Wd = strings.TrimSuffix(s.Wd, "/")
 
 	// relative path
 	return s.Wd
