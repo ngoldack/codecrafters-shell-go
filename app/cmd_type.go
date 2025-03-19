@@ -28,7 +28,7 @@ func CommandType() CommandFunc {
 			}
 
 			for _, e := range entries {
-				if p, ok := getSearchedExecutable(e, args[1]); ok {
+				if p, ok := getSearchedExecutable(e, path, args[1]); ok {
 					fmt.Printf("%s is %s\n", args[0], p)
 					return nil
 				}
@@ -39,7 +39,7 @@ func CommandType() CommandFunc {
 	}
 }
 
-func getSearchedExecutable(e os.DirEntry, exe string) (string, bool) {
+func getSearchedExecutable(e os.DirEntry, path, exe string) (string, bool) {
 	info, err := e.Info()
 	if err != nil {
 		return "", false
@@ -51,7 +51,7 @@ func getSearchedExecutable(e os.DirEntry, exe string) (string, bool) {
 	}
 
 	if info.Name() == exe {
-		return e.Name() + info.Name(), true
+		return path + "/" + e.Name() + info.Name(), true
 	}
 
 	return "", false
