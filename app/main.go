@@ -8,14 +8,6 @@ import (
 	"strings"
 )
 
-// args index 0 is always the command itself
-type CommandFunc = func(args []string) error
-
-var cmds map[string]CommandFunc = map[string]CommandFunc{
-	"exit": CommandExit(),
-	"echo": CommandEcho(),
-}
-
 func main() {
 	for {
 		fmt.Fprint(os.Stdout, "$ ")
