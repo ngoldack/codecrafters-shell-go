@@ -53,14 +53,14 @@ func main() {
 	}
 }
 
-func getCommand(command []string) (CommandFunc, error) {
-	if len(command) == 0 {
+func getCommand(args []string) (CommandFunc, error) {
+	if len(args) == 0 {
 		return nil, errors.New("empty command")
 	}
 
-	cmd, ok := cmds[command[0]]
+	cmd, ok := cmds[args[0]]
 	if !ok {
-		return nil, fmt.Errorf("%s: command not found", command[:len(command)-1])
+		return nil, fmt.Errorf("%s: command not found", args[0])
 	}
 
 	return cmd, nil
