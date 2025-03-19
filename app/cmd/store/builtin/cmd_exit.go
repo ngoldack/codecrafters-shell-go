@@ -7,10 +7,11 @@ import (
 	"strconv"
 
 	"github.com/codecrafters-io/shell-starter-go/app/cmd"
+	"github.com/codecrafters-io/shell-starter-go/app/state"
 )
 
 func commandExit() cmd.CommandFunc {
-	return func(args []string) error {
+	return func(_ *state.State, args []string) error {
 		if len(args) <= 1 {
 			return errors.New("no status code")
 		}

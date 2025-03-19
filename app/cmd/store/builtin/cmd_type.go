@@ -6,10 +6,11 @@ import (
 	"strings"
 
 	"github.com/codecrafters-io/shell-starter-go/app/cmd"
+	"github.com/codecrafters-io/shell-starter-go/app/state"
 )
 
 func commandType(cmds map[string]cmd.CommandFunc) cmd.CommandFunc {
-	return func(args []string) error {
+	return func(_ *state.State, args []string) error {
 		if len(args) <= 1 {
 			return fmt.Errorf("no args given")
 		}

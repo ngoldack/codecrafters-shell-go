@@ -1,6 +1,10 @@
 package cmd
 
-import "errors"
+import (
+	"errors"
+
+	"github.com/codecrafters-io/shell-starter-go/app/state"
+)
 
 type Command struct {
 	name  string
@@ -20,8 +24,8 @@ func NewCommand(name string, store string, path string, cmdFn CommandFunc) Comma
 	}
 }
 
-func (c Command) Exec(args []string) error {
-	return c.cmdFn(args)
+func (c Command) Exec(s *state.State, args []string) error {
+	return c.cmdFn(s, args)
 }
 
 type CommandStore interface {
@@ -29,7 +33,7 @@ type CommandStore interface {
 }
 
 // args index 0 is always the command itself
-type CommandFunc = func(args []string) error
+type CommandFunc = func(s *state.State, args []string) error
 
 type ErrCommandNotFound struct {
 	command string
