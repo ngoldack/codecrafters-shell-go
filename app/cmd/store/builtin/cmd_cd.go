@@ -40,6 +40,7 @@ func getNewPath(s *state.State, p string) string {
 
 	for _, seg := range strings.Split(p, "/") {
 		if p == "~" {
+			s.Wd = s.Home
 			continue
 		}
 
