@@ -1,12 +1,14 @@
-package main
+package builtin
 
 import (
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/codecrafters-io/shell-starter-go/app/cmd"
 )
 
-func CommandType() CommandFunc {
+func commandType(cmds map[string]cmd.CommandFunc) cmd.CommandFunc {
 	return func(args []string) error {
 		if len(args) <= 1 {
 			return fmt.Errorf("no args given")

@@ -1,13 +1,15 @@
-package main
+package builtin
 
 import (
 	"errors"
 	"fmt"
 	"os"
 	"strconv"
+
+	"github.com/codecrafters-io/shell-starter-go/app/cmd"
 )
 
-func CommandExit() CommandFunc {
+func commandExit() cmd.CommandFunc {
 	return func(args []string) error {
 		if len(args) <= 1 {
 			return errors.New("no status code")

@@ -2,13 +2,24 @@ package main
 
 import (
 	"bufio"
-	"errors"
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/codecrafters-io/shell-starter-go/app/cmd"
+	"github.com/codecrafters-io/shell-starter-go/app/cmd/store/builtin"
+	"github.com/codecrafters-io/shell-starter-go/app/cmd/store/external"
 )
 
 func main() {
+	// Create command store
+	paths := strings.Split(os.Getenv("PATH"), ":")
+	stores := make([]cmd.CommandStore, len(paths)+1)
+	stores = append(stores, builtin.NewBuiltinStore())
+	for _, path := range paths {
+		stores = append(stores, external.NewExternalCommandStore(path))
+	}
+
 	for {
 		fmt.Fprint(os.Stdout, "$ ")
 
@@ -21,28 +32,16 @@ func main() {
 
 		args := strings.Split(command, " ")
 
-		cmd, err := getCommand(args)
+		cmd, err := cmd.GetCommand(stores, args[0])
 		if err != nil {
 			fmt.Println(err.Error())
 			continue
 		}
-		err = cmd(args)
+
+		err = cmd.Exec(args)
 		if err != nil {
 			fmt.Println(err.Error())
 			continue
 		}
 	}
-}
-
-func getCommand(args []string) (CommandFunc, error) {
-	if len(args) == 0 {
-		return nil, errors.New("empty command")
-	}
-
-	cmd, ok := cmds[args[0]]
-	if !ok {
-		return nil, fmt.Errorf("%s: command not found", args[0])
-	}
-
-	return cmd, nil
 }

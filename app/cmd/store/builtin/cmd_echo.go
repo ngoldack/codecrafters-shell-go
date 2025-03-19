@@ -1,11 +1,13 @@
-package main
+package builtin
 
 import (
 	"fmt"
 	"strings"
+
+	"github.com/codecrafters-io/shell-starter-go/app/cmd"
 )
 
-func CommandEcho() CommandFunc {
+func commandEcho() cmd.CommandFunc {
 	return func(args []string) error {
 		if len(args) <= 1 {
 			return nil
