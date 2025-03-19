@@ -42,7 +42,7 @@ func (s ExternalCommandStore) Find(name string) (cmd.Command, error) {
 
 func executeExternalCommand() cmd.CommandFunc {
 	return func(args []string) error {
-		c := exec.Command(args[0], args[:]...)
+		c := exec.Command(args[0], args[1:]...)
 		c.Stdout = os.Stdout
 
 		if err := c.Run(); err != nil {
