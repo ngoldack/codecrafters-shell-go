@@ -29,7 +29,7 @@ func CommandType() CommandFunc {
 
 			for _, e := range entries {
 				if p, ok := getSearchedExecutable(e, path, args[1]); ok {
-					fmt.Printf("%s is %s\n", args[0], p)
+					fmt.Printf("%s is %s\n", args[1], p)
 					return nil
 				}
 			}
