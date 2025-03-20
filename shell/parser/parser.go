@@ -4,7 +4,7 @@ import "strings"
 
 func Parse(command string) ([]string, error) {
 	args := make([]string, 0)
-	cmd, _, _ := strings.Cut(command, " ")
+	cmd, command, _ := strings.Cut(command, " ")
 	args = append(args, cmd)
 
 	var currentArg strings.Builder
