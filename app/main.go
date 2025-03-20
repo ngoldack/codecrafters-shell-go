@@ -46,7 +46,11 @@ func main() {
 		}
 		command, _ = strings.CutSuffix(command, "\n")
 
-		args := strings.Split(command, " ")
+		args, err := getArgs(command)
+		if err != nil {
+			fmt.Println(err.Error())
+			continue
+		}
 
 		cmd, err := cmd.GetCommand(stores, args[0])
 		if err != nil {
@@ -60,4 +64,48 @@ func main() {
 			continue
 		}
 	}
+}
+
+const singleQuote = '\''
+const doubleQuote = '"'
+const escapeChar = '\\'
+const spaceChar = ' '
+
+func getArgs(command string) ([]string, error) {
+	args := make([]string, 0)
+	var currentArg strings.Builder
+	inQuotes := false
+	quoteChar := rune(0)
+
+	for i := 0; i < len(command); i++ {
+		c := rune(command[i])
+
+		switch {
+		case c == singleQuote || c == doubleQuote:
+			if !inQuotes {
+				inQuotes = true
+				quoteChar = c
+			} else if c == quoteChar {
+				inQuotes = false
+				quoteChar = 0
+			} else {
+				currentArg.WriteRune(c)
+			}
+		case c == spaceChar:
+			if inQuotes {
+				currentArg.WriteRune(c)
+			} else if currentArg.Len() > 0 {
+				args = append(args, currentArg.String())
+				currentArg.Reset()
+			}
+		default:
+			currentArg.WriteRune(c)
+		}
+	}
+
+	if currentArg.Len() > 0 {
+		args = append(args, currentArg.String())
+	}
+
+	return args, nil
 }
