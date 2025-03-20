@@ -47,6 +47,7 @@ func executeExternalCommand() cmd.CommandFunc {
 		c.Stdout = os.Stdout
 		c.Stderr = os.Stderr
 		c.Dir = s.Wd
+		c.Env = os.Environ()
 
 		if err := c.Run(); err != nil {
 			return err

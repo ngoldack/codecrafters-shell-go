@@ -13,9 +13,9 @@ func NewBuiltinStore(register *cmd.StoreRegister) *CommandStoreBuiltin {
 		internalCmds: make(map[string]cmd.CommandFunc),
 	}
 
+	s.internalCmds["type"] = commandType(register)
 	s.internalCmds["exit"] = commandExit()
 	s.internalCmds["echo"] = commandEcho()
-	s.internalCmds["type"] = commandType(register)
 	s.internalCmds["pwd"] = commandPwd()
 	s.internalCmds["cd"] = commandCd()
 

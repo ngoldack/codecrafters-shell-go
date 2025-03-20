@@ -1,7 +1,6 @@
 package builtin
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"strconv"
@@ -13,7 +12,7 @@ import (
 func commandExit() cmd.CommandFunc {
 	return func(_ *state.State, args []string) error {
 		if len(args) <= 1 {
-			return errors.New("no status code")
+			os.Exit(0)
 		}
 
 		i, err := strconv.Atoi(args[1])

@@ -95,7 +95,12 @@ func printPrompt() {
 }
 
 func readCommand() (string, error) {
-	return bufio.NewReader(os.Stdin).ReadString('\n')
+	cmd, err := bufio.NewReader(os.Stdin).ReadString('\n')
+	if err != nil {
+		return "", err
+	}
+
+	return strings.TrimSuffix(cmd, "\n"), nil
 }
 
 func printError(err error) {

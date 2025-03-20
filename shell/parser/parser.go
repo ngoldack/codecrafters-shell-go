@@ -25,6 +25,9 @@ func Parse(command string) ([]string, error) {
 		case escapeChar:
 			if inQuotes && quoteChar == singleQuote {
 				currentArg.WriteRune(c)
+			} else if inQuotes && quoteChar == doubleQuote {
+				// TODO: Implement this
+				escaped = true
 			} else {
 				escaped = true
 			}
