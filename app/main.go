@@ -76,13 +76,17 @@ func getArgs(command string) ([]string, error) {
 	var currentArg strings.Builder
 	inQuotes := false
 	quoteChar := rune(0)
+	escapedAt := -1
 
 	for i := 0; i < len(command); i++ {
 		c := rune(command[i])
 
 		switch {
 		case c == singleQuote || c == doubleQuote:
-			if !inQuotes {
+			if escapedAt == i-1 {
+				currentArg.WriteRune(c)
+				escapedAt = -1
+			} else if !inQuotes {
 				inQuotes = true
 				quoteChar = c
 			} else if c == quoteChar {
@@ -92,11 +96,23 @@ func getArgs(command string) ([]string, error) {
 				currentArg.WriteRune(c)
 			}
 		case c == spaceChar:
-			if inQuotes {
+			if escapedAt == i-1 {
+				currentArg.WriteRune(c)
+				escapedAt = -1
+			} else if inQuotes {
 				currentArg.WriteRune(c)
 			} else if currentArg.Len() > 0 {
 				args = append(args, currentArg.String())
 				currentArg.Reset()
+			}
+		case c == escapeChar:
+			if inQuotes {
+				currentArg.WriteRune(c)
+			} else if escapedAt == i-1 {
+				currentArg.WriteRune(c)
+				escapedAt = -1
+			} else {
+				escapedAt = i
 			}
 		default:
 			currentArg.WriteRune(c)
