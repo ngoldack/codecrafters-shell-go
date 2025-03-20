@@ -1,21 +1,21 @@
 package builtin
 
 import (
-	"github.com/codecrafters-io/shell-starter-go/app/cmd"
+	"github.com/codecrafters-io/shell-starter-go/shell/cmd"
 )
 
 type CommandStoreBuiltin struct {
 	internalCmds map[string]cmd.CommandFunc
 }
 
-func NewBuiltinStore() *CommandStoreBuiltin {
+func NewBuiltinStore(register *cmd.StoreRegister) *CommandStoreBuiltin {
 	s := &CommandStoreBuiltin{
 		internalCmds: make(map[string]cmd.CommandFunc),
 	}
 
 	s.internalCmds["exit"] = commandExit()
 	s.internalCmds["echo"] = commandEcho()
-	s.internalCmds["type"] = commandType(s.internalCmds)
+	s.internalCmds["type"] = commandType(register)
 	s.internalCmds["pwd"] = commandPwd()
 	s.internalCmds["cd"] = commandCd()
 

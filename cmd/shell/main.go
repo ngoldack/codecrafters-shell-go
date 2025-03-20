@@ -6,24 +6,21 @@ import (
 	"os"
 	"strings"
 
-	"github.com/codecrafters-io/shell-starter-go/app/cmd"
-	"github.com/codecrafters-io/shell-starter-go/app/cmd/store/builtin"
-	"github.com/codecrafters-io/shell-starter-go/app/cmd/store/external"
-	"github.com/codecrafters-io/shell-starter-go/app/state"
+	"github.com/codecrafters-io/shell-starter-go/shell/cmd"
+	"github.com/codecrafters-io/shell-starter-go/shell/cmd/store/builtin"
+	"github.com/codecrafters-io/shell-starter-go/shell/cmd/store/external"
+	"github.com/codecrafters-io/shell-starter-go/shell/state"
 )
-
-type State struct {
-	Stores []cmd.CommandStore
-	Wd     string
-}
 
 func main() {
 	// Create command store
 	paths := strings.Split(os.Getenv("PATH"), ":")
-	stores := make([]cmd.CommandStore, 0)
-	stores = append(stores, builtin.NewBuiltinStore())
+
+	reg := cmd.NewStoreRegister()
+
+	reg.Register(builtin.NewBuiltinStore(reg))
 	for _, path := range paths {
-		stores = append(stores, external.NewExternalCommandStore(path))
+		reg.Register(external.NewExternalCommandStore(path))
 	}
 
 	path, err := os.Getwd()
@@ -52,7 +49,7 @@ func main() {
 			continue
 		}
 
-		cmd, err := cmd.GetCommand(stores, args[0])
+		cmd, err := cmd.GetCommand(reg.Stores(), args[0])
 		if err != nil {
 			fmt.Println(err.Error())
 			continue
@@ -71,22 +68,38 @@ const doubleQuote = '"'
 const escapeChar = '\\'
 const spaceChar = ' '
 
+var escapedCharsInDoubleQuotes = []rune{
+	'n',
+	'\\',
+	'$',
+	'"',
+}
+
 func getArgs(command string) ([]string, error) {
 	args := make([]string, 0)
 	var currentArg strings.Builder
 	inQuotes := false
 	quoteChar := rune(0)
-	escapedAt := -1
+	escaped := false
 
 	for i := 0; i < len(command); i++ {
 		c := rune(command[i])
 
-		switch {
-		case c == singleQuote || c == doubleQuote:
-			if escapedAt == i-1 {
+		if escaped {
+			currentArg.WriteRune(c)
+			escaped = false
+			continue
+		}
+
+		switch c {
+		case escapeChar:
+			if inQuotes && quoteChar == singleQuote {
 				currentArg.WriteRune(c)
-				escapedAt = -1
-			} else if !inQuotes {
+			} else {
+				escaped = true
+			}
+		case singleQuote, doubleQuote:
+			if !inQuotes {
 				inQuotes = true
 				quoteChar = c
 			} else if c == quoteChar {
@@ -95,24 +108,12 @@ func getArgs(command string) ([]string, error) {
 			} else {
 				currentArg.WriteRune(c)
 			}
-		case c == spaceChar:
-			if escapedAt == i-1 {
-				currentArg.WriteRune(c)
-				escapedAt = -1
-			} else if inQuotes {
+		case spaceChar:
+			if inQuotes {
 				currentArg.WriteRune(c)
 			} else if currentArg.Len() > 0 {
 				args = append(args, currentArg.String())
 				currentArg.Reset()
-			}
-		case c == escapeChar:
-			if inQuotes {
-				currentArg.WriteRune(c)
-			} else if escapedAt == i-1 {
-				currentArg.WriteRune(c)
-				escapedAt = -1
-			} else {
-				escapedAt = i
 			}
 		default:
 			currentArg.WriteRune(c)

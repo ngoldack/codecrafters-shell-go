@@ -3,7 +3,7 @@ package cmd
 import (
 	"errors"
 
-	"github.com/codecrafters-io/shell-starter-go/app/state"
+	"github.com/codecrafters-io/shell-starter-go/shell/state"
 )
 
 type Command struct {
@@ -26,6 +26,18 @@ func NewCommand(name string, store string, path string, cmdFn CommandFunc) Comma
 
 func (c Command) Exec(s *state.State, args []string) error {
 	return c.cmdFn(s, args)
+}
+
+func (c Command) Name() string {
+	return c.name
+}
+
+func (c Command) Store() string {
+	return c.store
+}
+
+func (c Command) Path() string {
+	return c.path
 }
 
 type CommandStore interface {
